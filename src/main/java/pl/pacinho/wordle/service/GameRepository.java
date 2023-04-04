@@ -13,6 +13,7 @@ import java.util.Optional;
 
 @Repository
 public class GameRepository {
+    private final int ROUND_COUNT = 5;
     private Map<String, Game> gameMap;
 
     public GameRepository() {
@@ -20,7 +21,7 @@ public class GameRepository {
     }
 
     public Game newGame(String playerName) {
-        Game game = new Game(playerName);
+        Game game = new Game(playerName, ROUND_COUNT);
         gameMap.put(game.getId(), game);
         return game;
     }

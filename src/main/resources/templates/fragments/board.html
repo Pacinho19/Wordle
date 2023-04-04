@@ -2,9 +2,30 @@
 
     <th:block th:if="${game!=null}">
         <input type="hidden" id="gameId" th:value="${game.id}">
+        <input type="hidden" id="wordLength" th:value="${game.wordLength}">
     </th:block>
 
-    <div style="margin-top:2%; height: 90vh;width: 90vw;margin:0 auto;background-color:green;border: black solid 3px">
+    <div style=" height: 90vh;width: 90vw;margin:2% auto;">
+        <div class="row" th:each="i : ${#numbers.sequence(1,game.roundCount)}"
+             style="width:90%;margin:2% auto;display: flex;justify-content: center;align-items: center;">
+            <th:block th:if="${i==#lists.size(game.answers)+1}">
+                <th:block th:each="letterNumber : ${#numbers.sequence(1,game.wordLength)}">
+                    <span class="badge badge-light" style="font-size:5rem;margin-left:1%;display: inline-block" th:id="${'letter' + letterNumber}">_</span>
+                </th:block>
+            </th:block>
+            <th:block th:if="${#lists.size(game.answers)<i && i!=#lists.size(game.answers)+1}">
+                <th:block th:each="letter : ${#numbers.sequence(1,game.wordLength)}">
+                    <span class="badge badge-light" style="font-size:5rem;margin-left:1%;display: inline-block">_</span>
+                </th:block>
+            </th:block>
+            <th:block th:if="${#lists.size(game.answers)>=i && i!=#lists.size(game.answers)+1}">
+                <th:block th:each="letter : ${game.answers[i-1].letters}">
+                    <span   th:text="${letter.letter}" style="font-size:5rem;margin-left:1%;display: inline-block"
+                            th:class="${'badge badge-' + (!letter.correctPosition && !letter.existsInWord ? 'secondary' : letter.correctPosition ? 'success' : letter.existsInWord ? 'warning' : '')}"
+                     ></span>
+                </th:block>
+            </th:block>
 
+        </div>
     </div>
 </div>

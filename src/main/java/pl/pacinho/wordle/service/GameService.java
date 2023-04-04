@@ -3,6 +3,7 @@ package pl.pacinho.wordle.service;
 import lombok.RequiredArgsConstructor;
 import org.springframework.messaging.simp.SimpMessagingTemplate;
 import org.springframework.stereotype.Service;
+import pl.pacinho.wordle.model.dto.AnswerRequestDto;
 import pl.pacinho.wordle.model.dto.GameDto;
 import pl.pacinho.wordle.model.dto.mapper.GameDtoMapper;
 import pl.pacinho.wordle.model.entity.memory.Game;
@@ -35,4 +36,9 @@ public class GameService {
         return GameDtoMapper.parse(gameLogicService.findById(gameId));
     }
 
+    public void answer(String gameId, AnswerRequestDto answerRequestDto) {
+        Game game = gameLogicService.findById(gameId);
+        gameLogicService.checkAnswer(game, answerRequestDto);
+        simpMessagingTemplate.convertAndSend( "/reload-board/" + game.getId(), true);
+    }
 }

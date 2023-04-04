@@ -1,13 +1,13 @@
 package pl.pacinho.wordle.controller.ui;
 
 import lombok.RequiredArgsConstructor;
+import org.springframework.http.HttpStatus;
 import org.springframework.security.core.Authentication;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.*;
 import pl.pacinho.wordle.config.UIConfig;
+import pl.pacinho.wordle.model.dto.AnswerRequestDto;
 import pl.pacinho.wordle.model.dto.GameDto;
 import pl.pacinho.wordle.service.GameService;
 
@@ -62,6 +62,13 @@ public class GameController {
                               @PathVariable(value = "gameId") String gameId) {
         model.addAttribute("game", gameService.findDtoById(gameId));
         return "fragments/board :: boardFrag";
+    }
+
+    @ResponseStatus(HttpStatus.NO_CONTENT)
+    @PostMapping(UIConfig.GAME_ANSWER)
+    public void answer( @RequestBody AnswerRequestDto answerRequestDto,
+                                @PathVariable(value = "gameId") String gameId) {
+        gameService.answer( gameId, answerRequestDto);
     }
 
 }

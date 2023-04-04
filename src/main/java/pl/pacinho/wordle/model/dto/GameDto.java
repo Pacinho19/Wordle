@@ -6,6 +6,7 @@ import lombok.Getter;
 import pl.pacinho.wordle.model.enums.GameStatus;
 
 import java.time.LocalDateTime;
+import java.util.LinkedList;
 
 @Getter
 @Builder
@@ -16,4 +17,7 @@ public class GameDto {
     private GameStatus status;
     private String player;
     private LocalDateTime startTime;
+    private int wordLength;
+    private int roundCount;
+    private LinkedList<AnswerDto> answers;
 }

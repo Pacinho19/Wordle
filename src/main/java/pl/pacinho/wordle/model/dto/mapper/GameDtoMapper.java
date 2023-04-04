@@ -11,6 +11,9 @@ public class GameDtoMapper {
                 .startTime(game.getStartTime())
                 .player(game.getPlayer().getName())
                 .status(game.getStatus())
+                .wordLength(game.getWord().length())
+                .roundCount(game.getRoundCount())
+                .answers(game.getAnswers())
                 .build();
     }
 }

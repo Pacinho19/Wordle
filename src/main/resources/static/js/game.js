@@ -17,9 +17,61 @@ function updateBoard() {
     xhr.onreadystatechange = function () {
         if (xhr.readyState == XMLHttpRequest.DONE) {
             $("#board").replaceWith(xhr.responseText);
-            addStackAction();
         }
     }
     xhr.open('GET', "/wordle/game/" + document.getElementById("gameId").value + "/board/reload", true);
     xhr.send(null);
+}
+
+let currentLetter=1
+document.addEventListener('keyup', (e) => {
+    var key = event.keyCode || event.charCode;
+    if (event.keyCode >= 65 && event.keyCode <= 90) {
+        letterSpan  = document.getElementById('letter' + currentLetter);
+
+        if(letterSpan==null)
+            return;
+
+        letterSpan.innerHTML = String.fromCharCode(event.keyCode).toUpperCase();
+        currentLetter++;
+    }else if( (key == 8 || key == 46) && currentLetter > 1 ){
+     console.log(currentLetter);
+        letterSpan  = document.getElementById('letter' + (currentLetter-1));
+        if(letterSpan==null)
+            return;
+
+        letterSpan.innerHTML = "_";
+        currentLetter--;
+    }else if (event.key === 'Enter' || event.keyCode === 13) {
+        sendAnswer();
+    }
+});
+
+function sendAnswer() {
+    if(!validate())
+        return;
+
+     currentLetter = 1;
+     var xhr = new XMLHttpRequest();
+     var url = '/wordle/game/' + document.getElementById("gameId").value + '/answer';
+     xhr.open("POST", url, true);
+     xhr.setRequestHeader("Content-Type", "application/json");
+     xhr.onreadystatechange = function () { };
+
+     const answerRequest = new Object();
+     answerRequest.word = getAnswerWord();
+     var data = JSON.stringify(answerRequest);
+     xhr.send(data);
+}
+
+function getAnswerWord() {
+    let word = '';
+    for (let i = 1; i <=document.getElementById('wordLength').value; i++) {
+      word = word + (document.getElementById('letter' + i).innerHTML);
+    }
+    return word;
+}
+
+function validate(){
+    return getAnswerWord().length == document.getElementById('wordLength').value;
 }
