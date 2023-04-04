@@ -7,7 +7,9 @@ import pl.pacinho.wordle.model.dto.AnswerDto;
 import pl.pacinho.wordle.model.dto.AnswerRequestDto;
 import pl.pacinho.wordle.model.dto.LetterDto;
 import pl.pacinho.wordle.model.entity.memory.Game;
+import pl.pacinho.wordle.model.enums.GameStatus;
 import pl.pacinho.wordle.repository.WordRepository;
+import pl.pacinho.wordle.tools.GameUtils;
 import pl.pacinho.wordle.utils.RandomUtils;
 
 import java.util.List;
@@ -35,12 +37,17 @@ public class GameLogicService {
     }
 
 
-    public void checkAnswer(Game game, AnswerRequestDto answerRequestDto) {
+    public boolean checkAnswer(Game game, AnswerRequestDto answerRequestDto) {
+        boolean exists = wordRepository.existsByName(answerRequestDto.word());
+        if (!exists)
+            return true; //error
+
         game.addAnswer(
                 new AnswerDto(
                         checkLetters(game.getWord(), answerRequestDto.word())
                 )
         );
+        return false;//error
     }
 
     private List<LetterDto> checkLetters(String word, String answerWord) {
@@ -52,6 +59,13 @@ public class GameLogicService {
 
     private LetterDto checkLetter(Integer index, String word, String answerWord) {
         char c = answerWord.charAt(index);
-        return new LetterDto(c, c==word.charAt(index), word.indexOf(c)>-1);
+        return new LetterDto(c, c == word.charAt(index), word.indexOf(c) > -1);
     }
+
+    public void checkFinish(Game game) {
+        if (GameUtils.checkAllLettersCorrect(game) || game.getRoundCount()==game.getAnswers().size())
+            game.setStatus(GameStatus.FINISHED);
+    }
+
+
 }

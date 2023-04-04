@@ -7,6 +7,7 @@ import pl.pacinho.wordle.model.dto.AnswerRequestDto;
 import pl.pacinho.wordle.model.dto.GameDto;
 import pl.pacinho.wordle.model.dto.mapper.GameDtoMapper;
 import pl.pacinho.wordle.model.entity.memory.Game;
+import pl.pacinho.wordle.model.enums.GameStatus;
 
 import java.util.List;
 
@@ -38,7 +39,11 @@ public class GameService {
 
     public void answer(String gameId, AnswerRequestDto answerRequestDto) {
         Game game = gameLogicService.findById(gameId);
-        gameLogicService.checkAnswer(game, answerRequestDto);
-        simpMessagingTemplate.convertAndSend( "/reload-board/" + game.getId(), true);
+        if (game.getStatus() == GameStatus.FINISHED)
+            return;
+
+        boolean error = gameLogicService.checkAnswer(game, answerRequestDto);
+        gameLogicService.checkFinish(game);
+        simpMessagingTemplate.convertAndSend("/reload-board/" + game.getId(), error ? "Word " + answerRequestDto.word() + " not exists in dictionary!" : "");
     }
 }

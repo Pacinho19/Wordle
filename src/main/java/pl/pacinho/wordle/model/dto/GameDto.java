@@ -20,4 +20,5 @@ public class GameDto {
     private int wordLength;
     private int roundCount;
     private LinkedList<AnswerDto> answers;
+    private String resultMessage;
 }

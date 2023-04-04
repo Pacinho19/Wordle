@@ -7,4 +7,6 @@ import pl.pacinho.wordle.model.entity.Word;
 @Repository
 public interface WordRepository extends JpaRepository<Word, Long> {
     Word findById(long number);
+
+    boolean existsByName(String word);
 }

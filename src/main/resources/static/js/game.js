@@ -6,7 +6,12 @@ privateStompClient = Stomp.over(socket);
 privateStompClient.connect({}, function (frame) {
     var gameId = document.getElementById('gameId').value;
     privateStompClient.subscribe('/reload-board/' + gameId, function (result) {
-        updateBoard();
+        if(result.body)
+            alert(result.body);
+        else{
+            updateBoard();
+            currentLetter = 1;
+        }
     });
 });
 
@@ -25,6 +30,10 @@ function updateBoard() {
 
 let currentLetter=1
 document.addEventListener('keyup', (e) => {
+
+    if(document.getElementById('gameStatus').value == 'FINISHED')
+        return;
+
     var key = event.keyCode || event.charCode;
     if (event.keyCode >= 65 && event.keyCode <= 90) {
         letterSpan  = document.getElementById('letter' + currentLetter);
@@ -51,7 +60,6 @@ function sendAnswer() {
     if(!validate())
         return;
 
-     currentLetter = 1;
      var xhr = new XMLHttpRequest();
      var url = '/wordle/game/' + document.getElementById("gameId").value + '/answer';
      xhr.open("POST", url, true);
