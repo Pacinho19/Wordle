@@ -24,6 +24,7 @@ public class StartApp {
 
         FileUtils.readTxt(FileUtils.getFileFromResource("dictionary/Words.txt"))
                 .stream()
+                .filter(s -> !s.contains(" "))
                 .distinct()
                 .forEach(name -> wordRepository.save(
                         new Word(name)
