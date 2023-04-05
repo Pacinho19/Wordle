@@ -41,7 +41,8 @@ document.addEventListener('keyup', (e) => {
         if(letterSpan==null)
             return;
 
-        letterSpan.innerHTML = String.fromCharCode(event.keyCode).toUpperCase();
+        var letter = getLetter(e);
+        letterSpan.innerHTML = letter.toUpperCase();
         currentLetter++;
     }else if( (key == 8 || key == 46) && currentLetter > 1 ){
      console.log(currentLetter);
@@ -55,6 +56,43 @@ document.addEventListener('keyup', (e) => {
         sendAnswer();
     }
 });
+
+const specialCharactersMap = initSpecialCharactersMap();
+function getLetter(event){
+    letter = String.fromCharCode(event.keyCode)
+
+    if(event.altKey){
+        specialChar = specialCharactersMap.get(letter);
+        if(specialChar!=null){
+            letter = specialChar;
+        }
+    }
+
+    return letter;
+}
+
+function initSpecialCharactersMap(){
+    map1 = new Map();
+    map1.set('a', 'ą');
+    map1.set('A', 'ą');
+    map1.set('c', 'ć');
+    map1.set('C', 'ć');
+    map1.set('e', 'ę');
+    map1.set('E', 'ę');
+    map1.set('l', 'ł');
+    map1.set('L', 'ł');
+    map1.set('n', 'ń');
+    map1.set('N', 'ń');
+    map1.set('o', 'ó');
+    map1.set('O', 'ó');
+    map1.set('s', 'ś');
+    map1.set('S', 'ś');
+    map1.set('z', 'ż');
+    map1.set('Z', 'ż');
+    map1.set('x', 'ź');
+    map1.set('X', 'ź');
+    return map1;
+}
 
 function sendAnswer() {
     if(!validate())

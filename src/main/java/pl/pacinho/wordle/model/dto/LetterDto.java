@@ -1,4 +1,6 @@
 package pl.pacinho.wordle.model.dto;
 
-public record LetterDto(Character letter, boolean correctPosition, boolean existsInWord) {
+import pl.pacinho.wordle.model.enums.LetterStatus;
+
+public record LetterDto(Character letter, LetterStatus status) {
 }

@@ -44,26 +44,30 @@ public class GameLogicService {
 
         game.addAnswer(
                 new AnswerDto(
-                        checkLetters(game.getWord(), answerRequestDto.word())
+                        checkLetters(game, answerRequestDto.word())
                 )
         );
         return false;//error
     }
 
-    private List<LetterDto> checkLetters(String word, String answerWord) {
+    private List<LetterDto> checkLetters(Game game, String answerWord) {
         return IntStream.range(0, answerWord.length())
                 .boxed()
-                .map(i -> checkLetter(i, word, answerWord))
+                .map(i -> {
+                    LetterDto letterDto = checkLetter(i, game.getWord(), answerWord);
+                    game.getLettersStatus().put(letterDto.letter(), letterDto.status());
+                    return letterDto;
+                })
                 .toList();
     }
 
     private LetterDto checkLetter(Integer index, String word, String answerWord) {
         char c = answerWord.charAt(index);
-        return new LetterDto(c, c == word.charAt(index), word.indexOf(c) > -1);
+        return new LetterDto(c, GameUtils.checkLetterStatus(c, word, index));
     }
 
     public void checkFinish(Game game) {
-        if (GameUtils.checkAllLettersCorrect(game) || game.getRoundCount()==game.getAnswers().size())
+        if (GameUtils.checkAllLettersCorrect(game) || game.getRoundCount() == game.getAnswers().size())
             game.setStatus(GameStatus.FINISHED);
     }
 

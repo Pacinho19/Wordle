@@ -15,6 +15,7 @@ public class GameDtoMapper {
                 .status(game.getStatus())
                 .wordLength(game.getWord().length())
                 .roundCount(game.getRoundCount())
+                .lettersStatus(game.getLettersStatus())
                 .answers(game.getAnswers())
                 .resultMessage(
                         getResultMessage(game)

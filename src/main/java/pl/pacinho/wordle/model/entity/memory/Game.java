@@ -4,9 +4,12 @@ import lombok.Getter;
 import lombok.Setter;
 import pl.pacinho.wordle.model.dto.AnswerDto;
 import pl.pacinho.wordle.model.enums.GameStatus;
+import pl.pacinho.wordle.model.enums.LetterStatus;
+import pl.pacinho.wordle.tools.GameUtils;
 
 import java.time.LocalDateTime;
 import java.util.LinkedList;
+import java.util.TreeMap;
 import java.util.UUID;
 
 @Getter
@@ -22,6 +25,8 @@ public class Game {
     private int roundCount;
     private LinkedList<AnswerDto> answers;
 
+    private TreeMap<Character, LetterStatus> lettersStatus;
+
 
     public Game(String player1, int roundCount) {
         this.player = new Player(player1, 1);
@@ -30,6 +35,7 @@ public class Game {
         this.status = GameStatus.IN_PROGRESS;
         this.startTime = LocalDateTime.now();
         this.answers = new LinkedList<>();
+        this.lettersStatus = GameUtils.initLettersStatus();
     }
 
     public void addAnswer(AnswerDto answerDto) {

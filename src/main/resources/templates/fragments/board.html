@@ -7,28 +7,42 @@
     </th:block>
 
     <div style=" height: 90vh;width: 90vw;margin:2% auto">
+
+        <h1 style="text-align:center" th:if="${game.status.name=='FINISHED'}" th:text="${game.resultMessage}"></h1>
+
         <div class="row" th:each="i : ${#numbers.sequence(1,game.roundCount)}"
              style="width:90%;margin:2% auto;display: flex;justify-content: center;align-items: center;">
             <th:block th:if="${i==#lists.size(game.answers)+1}">
                 <th:block th:each="letterNumber : ${#numbers.sequence(1,game.wordLength)}">
-                    <span class="badge badge-light" style="font-size:5rem;margin-left:1%;display: inline-block"
+                    <span class="badge badge-light" style="font-size:4rem;margin-left:1%;display: inline-block"
                           th:id="${game.status.name!='FINISHED' ? 'letter' + letterNumber : ''}">_</span>
                 </th:block>
             </th:block>
             <th:block th:if="${#lists.size(game.answers)<i && i!=#lists.size(game.answers)+1}">
                 <th:block th:each="letter : ${#numbers.sequence(1,game.wordLength)}">
-                    <span class="badge badge-light" style="font-size:5rem;margin-left:1%;display: inline-block">_</span>
+                    <span class="badge badge-light" style="font-size:4rem;margin-left:1%;display: inline-block">_</span>
                 </th:block>
             </th:block>
             <th:block th:if="${#lists.size(game.answers)>=i && i!=#lists.size(game.answers)+1}">
                 <th:block th:each="letter : ${game.answers[i-1].letters}">
-                    <span th:text="${letter.letter}" style="font-size:5rem;margin-left:1%;display: inline-block"
-                          th:class="${'badge badge-' + (!letter.correctPosition && !letter.existsInWord ? 'secondary' : letter.correctPosition ? 'success' : letter.existsInWord ? 'warning' : '')}"
+                    <span th:text="${letter.letter}" style="font-size:4rem;margin-left:1%;display: inline-block"
+                          th:class="${'badge badge-' + (letter.status.name=='USED' ? 'secondary' : letter.status.name=='CORRECT' ? 'success' : letter.status.name=='EXISTING' ? 'warning' : '')}"
                     ></span>
                 </th:block>
             </th:block>
 
         </div>
-        <h1 style="text-align:center" th:if="${game.status.name=='FINISHED'}" th:text="${game.resultMessage}"></h1>
+
+        <hr class="rounded" style=" border-top: 8px solid #bbb; border-radius: 5px;">
+
+        <div class="row"`
+             style="width:90%;margin:2% auto;display: flex;justify-content: center;align-items: center;">
+            <th:block th:each="entry : ${game.lettersStatus}">
+                    <span th:class="${'badge badge-' + (entry.value.name=='USED' ? 'secondary' : entry.value.name=='CORRECT' ? 'success' : entry.value.name=='EXISTING' ? 'warning' : '')}"
+                            style="font-size:2rem;margin-left:1%;display: inline-block"
+                          th:text="${entry.key}"></span>
+            </th:block>
+        </div>
+
     </div>
 </div>
