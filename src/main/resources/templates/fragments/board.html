@@ -24,10 +24,14 @@
                 </th:block>
             </th:block>
             <th:block th:if="${#lists.size(game.answers)>=i && i!=#lists.size(game.answers)+1}">
-                <th:block th:each="letter : ${game.answers[i-1].letters}">
-                    <span th:text="${letter.letter}" style="font-size:4rem;margin-left:1%;display: inline-block"
-                          th:class="${'badge badge-' + (letter.status.name=='USED' ? 'secondary' : letter.status.name=='CORRECT' ? 'success' : letter.status.name=='EXISTING' ? 'warning' : '')}"
-                    ></span>
+                <th:block th:each="letter, iter : ${game.answers[i-1].letters}">
+                    <span
+                          th:id="${#lists.size(game.answers)==i ? ('lastAnswer' + iter.count) : ''}"
+                          th:text="${#lists.size(game.answers)!=i ? letter.letter : '_'}"
+                          th:attr="letter=${letter.letter}, badge=${'badge badge-' + (letter.status.name=='USED' ? 'secondary' : letter.status.name=='CORRECT' ? 'success' : letter.status.name=='EXISTING' ? 'warning' : '')}"
+                          style="font-size:4rem;margin-left:1%;display: inline-block"
+                          th:class="${#lists.size(game.answers)!=i ? ('badge badge-' + (letter.status.name=='USED' ? 'secondary' : letter.status.name=='CORRECT' ? 'success' : letter.status.name=='EXISTING' ? 'warning' : '')) : 'badge badge-light'}"
+                    >_</span>
                 </th:block>
             </th:block>
 

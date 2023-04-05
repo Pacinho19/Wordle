@@ -21,9 +21,26 @@
     <script src="https://cdnjs.cloudflare.com/ajax/libs/sockjs-client/1.6.1/sockjs.js"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/stomp.js/2.3.3/stomp.js"></script>
 
+    <style>
+         .zoom-in-out-box {
+          animation: zoom-in-zoom-out 1s ease 1;
+        }
+
+        @keyframes zoom-in-zoom-out {
+          0% {
+            transform: scale(1, 1);
+          }
+          50% {
+            transform: scale(1.1, 1.1);
+          }
+          100% {
+            transform: scale(1, 1);
+          }
+        }
+    </style>
 </head>
 
-<body >
+<body onLoad="zoomInZoomOutLastAnswer();">
 
 <div th:replace="fragments/topnav :: navbar"/>
 <div th:replace="fragments/board :: boardFrag"/>

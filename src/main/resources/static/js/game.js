@@ -22,6 +22,7 @@ function updateBoard() {
     xhr.onreadystatechange = function () {
         if (xhr.readyState == XMLHttpRequest.DONE) {
             $("#board").replaceWith(xhr.responseText);
+            zoomInZoomOutLastAnswer();
         }
     }
     xhr.open('GET', "/wordle/game/" + document.getElementById("gameId").value + "/board/reload", true);
@@ -45,7 +46,6 @@ document.addEventListener('keyup', (e) => {
         letterSpan.innerHTML = letter.toUpperCase();
         currentLetter++;
     }else if( (key == 8 || key == 46) && currentLetter > 1 ){
-     console.log(currentLetter);
         letterSpan  = document.getElementById('letter' + (currentLetter-1));
         if(letterSpan==null)
             return;
@@ -120,4 +120,22 @@ function getAnswerWord() {
 
 function validate(){
     return getAnswerWord().length == document.getElementById('wordLength').value;
+}
+
+function zoomInZoomOutLastAnswer(){
+    var interval = 500;
+    for (let i = 1; i <=document.getElementById('wordLength').value; i++) {
+      setTimeout(function () {
+             lastAnswerLetterSpan = document.getElementById('lastAnswer' + i);
+
+             if(lastAnswerLetterSpan==null)
+                return;
+
+             lastAnswerLetterSpan.innerHTML = lastAnswerLetterSpan.getAttribute("letter");
+             lastAnswerLetterSpan.className  = lastAnswerLetterSpan.getAttribute("badge")
+             lastAnswerLetterSpan.classList.add("zoom-in-out-box");
+
+      }, i * interval);
+    }
+
 }
