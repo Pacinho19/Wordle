@@ -13,7 +13,7 @@ import java.util.Optional;
 
 @Repository
 public class GameRepository {
-    private final int ROUND_COUNT = 5;
+    private final int ROUND_COUNT = 6;
     private Map<String, Game> gameMap;
 
     public GameRepository() {
