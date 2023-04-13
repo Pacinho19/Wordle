@@ -123,7 +123,7 @@ function validate(){
 }
 
 function zoomInZoomOutLastAnswer(){
-    var interval = 500;
+    var interval = 200;
     for (let i = 1; i <=document.getElementById('wordLength').value; i++) {
       setTimeout(function () {
              lastAnswerLetterSpan = document.getElementById('lastAnswer' + i);
